@@ -1,22 +1,70 @@
-function styleContainer(element: HTMLElement, width: number, height: number) {
+// style the container
+function setStyleContainer(
+  element: HTMLElement,
+  width: number,
+  height: number
+) {
   element.style.width = `${width}px`;
   element.style.height = `${height}px`;
   element.style.border = "1px solid black";
   element.style.position = "relative";
-  element.style.overflow = "hidden";
+  element.style.overflow = "hidden"; // Ensure overflow is hidden
 }
-
-function styleWrapper(element: HTMLElement, width: number, height: number) {
+// style the wrapper
+function setStyleWrapper(element: HTMLElement, width: number, height: number) {
   element.style.width = `${width}px`;
   element.style.height = `${height}px`;
   element.style.overflow = "hidden";
   element.style.position = "relative";
 }
 
-function animateImage(images: NodeList, currentIndex: number) {
-  const slidingImages = images as NodeListOf<HTMLElement>;
+// style the arrow button
+function setStyleArrow(
+  button: HTMLButtonElement,
+  text: string,
+  position: string
+) {
+  button.textContent = text;
+  button.style.position = "absolute";
+  button.style.top = "50%";
+  button.style.transform = "translateY(-50%)";
+  button.style.zIndex = "10";
+  button.style.border = "none";
+  button.style.background = "rgba(0, 0, 0, 0.5)";
+  button.style.color = "white";
+  button.style.padding = "10px";
+  button.style.cursor = "pointer";
+  button.style.borderRadius = "50%";
+  button.style.fontSize = "20px";
+  if (position === "left") {
+    button.style.left = "10px";
+  } else {
+    button.style.right = "10px";
+  }
+}
 
-  slidingImages.forEach((image, index) => {
+// style the dot container
+function setStyleDotsContainer(dotsContainer: HTMLDivElement): void {
+  dotsContainer.style.position = "absolute";
+  dotsContainer.style.bottom = "20px";
+  dotsContainer.style.left = "50%";
+  dotsContainer.style.transform = "translateX(-50%)";
+  dotsContainer.style.display = "flex";
+  dotsContainer.style.gap = "10px";
+}
+
+function setStyleImage(image: HTMLElement, index: number): void {
+  image.style.position = "absolute";
+  image.style.top = "0";
+  image.style.left = `${index * 100}%`;
+}
+
+// function to aminate the images
+function animateImage(
+  images: NodeListOf<HTMLElement>,
+  currentIndex: number
+): void {
+  images.forEach((image, index) => {
     image.style.transition = "left 2s ease";
     image.style.left = `${(index - currentIndex) * 100}%`;
     image.style.width = "100%";
@@ -38,12 +86,14 @@ class ImageCarousel {
   dots: HTMLSpanElement[];
   isAnimating: boolean;
   autoSlideInterval: number | undefined;
+  intervalTime: number;
 
   constructor(
     width: number,
     height: number,
     containerElement: HTMLElement,
-    containerWrapper: HTMLElement
+    containerWrapper: HTMLElement,
+    intervalTime: number
   ) {
     this.width = width;
     this.height = height;
@@ -53,78 +103,78 @@ class ImageCarousel {
     this.arrowRight = document.createElement("button");
     this.currentIndex = 0;
     this.isAnimating = true;
+    this.intervalTime = intervalTime;
 
     this.dotsContainer = document.createElement("div");
     this.dots = [];
     this.images = document.querySelectorAll(
-      ".img"
+      `#${containerWrapper.id} .img`
     ) as NodeListOf<HTMLImageElement>;
 
     this.CarouselStyle();
-    this.addEventListeners();
+    this.eventTriggers();
     this.updateDots();
     this.displayImage();
 
     this.startAutoSlide();
   }
 
-  // style the whole carousel
+  // this section hold the styling parts of the container
   CarouselStyle() {
-    styleContainer(this.containerElement, this.height, this.width);
-    styleWrapper(this.containerWrapper, this.height, this.width);
-    this.styleArrow(this.arrowLeft, "<");
-    this.styleArrow(this.arrowRight, ">");
-    this.styleDotsContainer();
-
+    setStyleContainer(this.containerElement, this.width, this.height);
+    setStyleWrapper(this.containerWrapper, this.width, this.height);
+    setStyleArrow(this.arrowLeft, "<", "left");
+    setStyleArrow(this.arrowRight, ">", "right");
     this.containerElement.appendChild(this.arrowLeft);
     this.containerElement.appendChild(this.arrowRight);
     this.containerElement.appendChild(this.dotsContainer);
+
+    setStyleDotsContainer(this.dotsContainer);
 
     this.images.forEach((image, index) => {
       image.style.position = "absolute";
       image.style.top = "0";
       image.style.left = `${index * 100}%`;
-      image.style.objectFit = "cover";
-      image.style.transition = "left 2s ease";
 
       const dot = document.createElement("span");
       dot.classList.add("dot");
-      dot.style.width = "10px";
-      dot.style.height = "10px";
+      dot.style.width = "12px";
+      dot.style.height = "12px";
       dot.style.borderRadius = "50%";
       dot.style.background = "gray";
       dot.style.cursor = "pointer";
+      dot.style.transition = "background 0.3s ease"; // Smooth transition for background color
+      dot.style.display = "inline-block"; // Ensure dots are visible
       dot.addEventListener("click", () => this.goToSlide(index));
       this.dotsContainer.appendChild(dot);
       this.dots.push(dot);
     });
   }
 
-  addEventListeners() {
-    this.arrowLeft.addEventListener("click", () => this.changeSlide(-1, true));
-    this.arrowRight.addEventListener("click", () => this.changeSlide(1, true));
+  // this section triggers events
+  eventTriggers() {
+    this.arrowLeft.addEventListener("click", () => this.changeSlide(-1));
+    this.arrowRight.addEventListener("click", () => this.changeSlide(1));
   }
 
-  changeSlide(direction: number, event: boolean) {
-    this.currentIndex += direction;
+  // this method helps to change slide
 
-    this.currentIndex =
-      this.currentIndex < 0
-        ? this.images.length - 1
-        : this.currentIndex >= this.images.length
-        ? 0
-        : this.currentIndex;
-
-    this.isAnimating = true;
-
-    if (event) {
-      console.log("event is called");
+  changeSlide(direction: number) {
+    if (this.isAnimating) {
       this.stopAutoSlide();
+      this.currentIndex += direction;
+      this.currentIndex =
+        this.currentIndex < 0
+          ? this.images.length - 1
+          : this.currentIndex >= this.images.length
+          ? 0
+          : this.currentIndex;
+      animateImage(this.images, this.currentIndex);
+      this.updateDots();
       this.startAutoSlide();
     }
-    animateImage(this.images, this.currentIndex);
-    this.updateDots();
   }
+  // this secition helps to select the slide from ball
 
   goToSlide(index: number) {
     this.currentIndex = index;
@@ -135,60 +185,81 @@ class ImageCarousel {
   }
 
   displayImage() {
-    this.images.forEach((image, index) => {
-      image.style.left = `${(index - this.currentIndex) * 100}%`;
-    });
+    animateImage(this.images, this.currentIndex);
   }
+
+  // update the dots
 
   updateDots() {
     this.dots.forEach((dot, index) => {
-      dot.style.background = index === this.currentIndex ? "black" : "orange";
+      dot.style.background = index === this.currentIndex ? "white" : "gray";
     });
   }
 
+  // start animation
   startAutoSlide() {
-    this.autoSlideInterval = window.setInterval(() => {
-      this.changeSlide(1, false);
-    }, 4000);
+    this.autoSlideInterval = window.setInterval(
+      () => this.changeSlide(1),
+      this.intervalTime
+    );
   }
-
+  
   stopAutoSlide() {
     clearInterval(this.autoSlideInterval);
   }
-
-  styleArrow(button: HTMLButtonElement, text: string) {
-    button.textContent = text;
-    button.style.position = "absolute";
-    button.style.top = "50%";
-    button.style.transform = "translateY(-50%)";
-    button.style.background = "rgba(0, 0, 0, 0.5)";
-    button.style.color = "white";
-    button.style.border = "none";
-    button.style.cursor = "pointer";
-    button.style.zIndex = "1";
-    if (text === "<") {
-      button.style.left = "0";
-    } else {
-      button.style.right = "0";
-    }
-  }
-
-  styleDotsContainer() {
-    this.dotsContainer.style.position = "absolute";
-    this.dotsContainer.style.bottom = "10px";
-    this.dotsContainer.style.left = "50%";
-    this.dotsContainer.style.transform = "translateX(-50%)";
-    this.dotsContainer.style.display = "flex";
-    this.dotsContainer.style.gap = "10px";
-  }
 }
 
-const container = document.getElementById(
-  "carousel-container-id"
+// this section creates the multiple instances
+const container1 = document.getElementById(
+  "carousel-container-id1"
+) as HTMLElement;
+const containerWrapper1 = document.getElementById(
+  "carousel-wrapper-id1"
+) as HTMLElement;
+const container2 = document.getElementById(
+  "carousel-container-id2"
+) as HTMLElement;
+const containerWrapper2 = document.getElementById(
+  "carousel-wrapper-id2"
+) as HTMLElement;
+const container3 = document.getElementById(
+  "carousel-container-id3"
+) as HTMLElement;
+const containerWrapper3 = document.getElementById(
+  "carousel-wrapper-id3"
+) as HTMLElement;
+const container4 = document.getElementById(
+  "carousel-container-id4"
+) as HTMLElement;
+const containerWrapper4 = document.getElementById(
+  "carousel-wrapper-id4"
 ) as HTMLElement;
 
-const containerWrapper = document.getElementById(
-  "carousel-wrapper-id"
-) as HTMLElement;
-
-const carousel = new ImageCarousel(500, 500, container, containerWrapper);
+const carousel1 = new ImageCarousel(
+  300,
+  400,
+  container1,
+  containerWrapper1,
+  2000
+);
+const carousel2 = new ImageCarousel(
+  300,
+  400,
+  container2,
+  containerWrapper2,
+  3000
+);
+const carousel3 = new ImageCarousel(
+  300,
+  400,
+  container3,
+  containerWrapper3,
+  4000
+);
+const carousel4 = new ImageCarousel(
+  300,
+  400,
+  container4,
+  containerWrapper4,
+  5000
+);
