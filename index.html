@@ -6,21 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Carousel</title>
     <style>
-      #carousel-container-id {
+      body {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-around;
       }
     </style>
   </head>
   <body>
     <div class="carousel-container" id="carousel-container-id">
       <div class="carousel-image-wrapper" id="carousel-wrapper-id">
-        <!-- <img src="images/jhamsike.png" alt="Image" /> -->
-        <!-- <img src="images/ktm adventure.png" alt="Image" />
-          <img src="images/polo.png" alt="Image" /> -->
+        <img class="img" src="images/jhamsike.png" data-active alt="Image" />
+        <img class="img" src="images/ktm adventure.png" alt="Image" />
+        <img class="img" src="images/polo.png" alt="Image" />
       </div>
     </div>
+
+    <!-- <div>this is second container</div> -->
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
