@@ -18,7 +18,6 @@ function setStyleWrapper(element: HTMLElement, width: number, height: number) {
   element.style.position = "relative";
 }
 
-
 function setStyleArrow(
   button: HTMLButtonElement,
   text: string,
@@ -43,7 +42,6 @@ function setStyleArrow(
   }
 }
 
-
 function setStyleDotsContainer(dotsContainer: HTMLDivElement): void {
   dotsContainer.style.position = "absolute";
   dotsContainer.style.bottom = "20px";
@@ -59,7 +57,7 @@ function setStyleImage(image: HTMLElement, index: number): void {
   image.style.left = `${index * 100}%`;
 }
 
-// animate 
+// animate
 function animateImage(
   images: NodeListOf<HTMLElement>,
   currentIndex: number
@@ -118,7 +116,7 @@ class ImageCarousel {
     this.startAutoSlide();
   }
 
-  // this section hold the styling parts of the container
+  // style container
   CarouselStyle() {
     setStyleContainer(this.containerElement, this.width, this.height);
     setStyleWrapper(this.containerWrapper, this.width, this.height);
@@ -150,14 +148,13 @@ class ImageCarousel {
     });
   }
 
-  // this section triggers events
+  // tirgger event
   eventTriggers() {
     this.arrowLeft.addEventListener("click", () => this.changeSlide(-1));
     this.arrowRight.addEventListener("click", () => this.changeSlide(1));
   }
 
-  // this method helps to change slide
-
+  // image slide
   changeSlide(direction: number) {
     if (this.isAnimating) {
       this.stopAutoSlide();
@@ -173,7 +170,8 @@ class ImageCarousel {
       this.startAutoSlide();
     }
   }
-  // this secition helps to select the slide from ball
+
+  // slide image from dot
   goToSlide(index: number) {
     this.currentIndex = index;
     this.displayImage();
@@ -182,6 +180,7 @@ class ImageCarousel {
     this.startAutoSlide();
   }
 
+  // displayImage
   displayImage() {
     animateImage(this.images, this.currentIndex);
   }
