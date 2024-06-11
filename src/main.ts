@@ -1,4 +1,4 @@
-// style the container
+// styling functions
 function setStyleContainer(
   element: HTMLElement,
   width: number,
@@ -10,7 +10,7 @@ function setStyleContainer(
   element.style.position = "relative";
   element.style.overflow = "hidden"; // Ensure overflow is hidden
 }
-// style the wrapper
+
 function setStyleWrapper(element: HTMLElement, width: number, height: number) {
   element.style.width = `${width}px`;
   element.style.height = `${height}px`;
@@ -18,7 +18,7 @@ function setStyleWrapper(element: HTMLElement, width: number, height: number) {
   element.style.position = "relative";
 }
 
-// style the arrow button
+
 function setStyleArrow(
   button: HTMLButtonElement,
   text: string,
@@ -43,7 +43,7 @@ function setStyleArrow(
   }
 }
 
-// style the dot container
+
 function setStyleDotsContainer(dotsContainer: HTMLDivElement): void {
   dotsContainer.style.position = "absolute";
   dotsContainer.style.bottom = "20px";
@@ -59,7 +59,7 @@ function setStyleImage(image: HTMLElement, index: number): void {
   image.style.left = `${index * 100}%`;
 }
 
-// function to animate the images
+// animate 
 function animateImage(
   images: NodeListOf<HTMLElement>,
   currentIndex: number
@@ -174,7 +174,6 @@ class ImageCarousel {
     }
   }
   // this secition helps to select the slide from ball
-
   goToSlide(index: number) {
     this.currentIndex = index;
     this.displayImage();
@@ -207,7 +206,7 @@ class ImageCarousel {
   }
 }
 
-// this section creates the multiple instances
+//multiple instance
 const container1 = document.getElementById(
   "carousel-container-id1"
 ) as HTMLElement;
