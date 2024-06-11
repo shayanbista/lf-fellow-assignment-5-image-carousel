@@ -15,3 +15,9 @@ main {
   flex-wrap: wrap;
   margin: 3%;
 }
+
+@media screen and (max-width: 786px) {
+  main {
+    justify-content: center;
+  }
+}

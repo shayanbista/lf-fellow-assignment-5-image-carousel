@@ -59,7 +59,7 @@ function setStyleImage(image: HTMLElement, index: number): void {
   image.style.left = `${index * 100}%`;
 }
 
-// function to aminate the images
+// function to animate the images
 function animateImage(
   images: NodeListOf<HTMLElement>,
   currentIndex: number
@@ -115,7 +115,6 @@ class ImageCarousel {
     this.eventTriggers();
     this.updateDots();
     this.displayImage();
-
     this.startAutoSlide();
   }
 
