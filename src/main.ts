@@ -142,8 +142,8 @@ class ImageCarousel {
       dot.style.borderRadius = "50%";
       dot.style.background = "gray";
       dot.style.cursor = "pointer";
-      dot.style.transition = "background 0.3s ease"; // Smooth transition for background color
-      dot.style.display = "inline-block"; // Ensure dots are visible
+      dot.style.transition = "background 0.3s ease";
+      dot.style.display = "inline-block";
       dot.addEventListener("click", () => this.goToSlide(index));
       this.dotsContainer.appendChild(dot);
       this.dots.push(dot);
@@ -188,7 +188,6 @@ class ImageCarousel {
   }
 
   // update the dots
-
   updateDots() {
     this.dots.forEach((dot, index) => {
       dot.style.background = index === this.currentIndex ? "white" : "gray";
@@ -202,7 +201,7 @@ class ImageCarousel {
       this.intervalTime
     );
   }
-  
+
   stopAutoSlide() {
     clearInterval(this.autoSlideInterval);
   }
