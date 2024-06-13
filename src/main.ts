@@ -8,7 +8,7 @@ function setStyleContainer(
   element.style.height = `${height}px`;
   element.style.border = "1px solid black";
   element.style.position = "relative";
-  element.style.overflow = "hidden"; // Ensure overflow is hidden
+  element.style.overflow = "hidden"; 
 }
 
 function setStyleWrapper(element: HTMLElement, width: number, height: number) {
@@ -70,7 +70,7 @@ function animateImage(
     image.style.objectFit = "cover";
   });
 }
-
+// main class
 class ImageCarousel {
   width: number;
   height: number;
